@@ -64,12 +64,34 @@ function Header() {
   );
 }
 function Main() {
+  let pizz = pizzaData;
+  let piz = pizz.length > 0;
+  // let piz = pizzaData;
+
   return (
     <div className="container menu">
       <h2>Our Menu</h2>
-      {pizzaData.map((pizza) => (
-        <Pizza objData={pizza} key={pizza.name} />
-      ))}
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit
+        deserunt inventore fugit iste nam id asperiores itaque distinctio harum
+        culpa.
+      </p>
+      {piz ? (
+        <>
+          {pizz.map((pizza) => (
+            <Pizza objData={pizza} key={pizza.name} />
+          ))}
+        </>
+      ) : (
+        <div> There is No Data </div>
+      )}
+      {/* {piz && (
+        <ul>
+          {pizz.map((pizza) => (
+            <Pizza objData={pizza} key={pizza.name} />
+          ))}
+        </ul>
+      )} */}
       {/* <Pizza
         name="Pizza Funghi"
         photoOf="pizzas/funghi.jpg"
@@ -86,30 +108,39 @@ function Main() {
   );
 }
 
-function Pizza(props) {
+function Pizza({ objData }) {
   return (
-    <main className="pizza">
-      <img src={props.objData.photoName} alt="funghi.jpg" />
+    <main className={`pizza ${objData.soldOut ? "sold-out" : ""} `}>
+      <img src={objData.photoName} alt="funghi.jpg" />
       <div>
-        <h2>{props.objData.name}</h2>
-        <p>{props.objData.ingredients}</p>
-        <span>Price : {props.objData.price + 15}</span>
+        <h2>{objData.name}</h2>
+        <p>{objData.ingredients}</p>
+        <span>{objData.soldOut ? "Sold Out CS" : objData.price + 15}</span>
       </div>
     </main>
   );
 }
-
+function OrderFooter({ cl, isopennow }) {
+  return (
+    <div className="footer">
+      {}
+      <h2>{isopennow && <p>We Are Open Now till {cl}:00 </p>}</h2>
+      <button className="btn">Order</button>
+    </div>
+  );
+}
 function Footer() {
   // return React.createElement(
   //   "footer",
   //   { className: "footer" },
   //   `${new Date().toLocaleTimeString()}We Are Currently Open!!`
   // );
-  return (
-    <div className="footer">
-      <h2>{new Date().toLocaleTimeString()}We Are Currently Open!!</h2>
-    </div>
-  );
+  const hour = new Date().getHours();
+  const openH = 11;
+  const closeH = 20;
+  const isOpen = hour >= openH && hour <= closeH;
+
+  return <OrderFooter cl={closeH} isopennow={isOpen.toString()} />;
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
